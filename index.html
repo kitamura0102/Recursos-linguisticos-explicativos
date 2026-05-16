@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recursos Lingüísticos Explicativos</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- CONFETTI CANVAS -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="app">
+
+    <!-- HEADER -->
+    <header>
+      <h1>🌍 Recursos lingüísticos explicativos</h1>
+      <p class="header-sub">Tipos de turismo</p>
+    </header>
+
+    <!-- PROGRESS BAR -->
+    <div id="progress-wrap">
+      <div id="progress-bar-bg">
+        <div id="progress-bar-fill"></div>
+      </div>
+      <div id="progress-label">Turismo <span id="prog-current">1</span> de <span id="prog-total">7</span></div>
+    </div>
+
+    <!-- CAROUSEL -->
+    <div id="carousel">
+
+      <!-- SLIDE -->
+      <div id="slide">
+
+        <!-- TOURISM CARD -->
+        <div id="tourism-card">
+          <div id="tourism-emoji"></div>
+          <div id="tourism-name"></div>
+          <div id="tourism-sentence"></div>
+        </div>
+
+        <!-- DROP AREA -->
+        <div id="drop-area">
+
+          <div class="drop-col">
+            <div class="drop-label causa-label">
+              <span class="drop-label-icon">🔗</span>
+              Conector de <strong>causa</strong>
+            </div>
+            <div class="drop-zone" id="dz-causa" data-col="causa">
+              <span class="drop-placeholder">Arrastra aquí</span>
+            </div>
+          </div>
+
+          <div class="drop-col">
+            <div class="drop-label reforma-label">
+              <span class="drop-label-icon">🔄</span>
+              Conector de <strong>reformulación</strong>
+            </div>
+            <div class="drop-zone" id="dz-reforma" data-col="reforma">
+              <span class="drop-placeholder">Arrastra aquí</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- WORD BANK -->
+        <div id="bank-wrap">
+          <div id="bank-title">🃏 Elige y arrastra el conector correcto</div>
+          <div id="bank-cards"></div>
+        </div>
+
+        <!-- FEEDBACK -->
+        <div id="feedback" style="display:none"></div>
+
+        <!-- NEXT BUTTON -->
+        <button id="next-btn" style="display:none" onclick="nextSlide()">
+          Siguiente ➜
+        </button>
+
+      </div>
+    </div>
+
+    <!-- FINAL SCREEN -->
+    <div id="final-screen" style="display:none">
+      <div id="final-emoji">🏆</div>
+      <h2>¡Lo lograste!</h2>
+      <p>Completaste los 7 tipos de turismo correctamente.</p>
+      <button onclick="restartGame()">🔁 Jugar de nuevo</button>
+    </div>
+
+    <!-- HINT -->
+    <div id="hint-box">
+      <span>💡</span>
+      <div>
+        <strong>Recuerda:</strong>
+        Los conectores de <span class="causa-hl">causa</span> explican el motivo.
+        Los de <span class="reforma-hl">reformulación</span> expresan lo mismo con otras palabras.
+        Si no hay conector, usa <strong>"No tiene conector"</strong>.
+      </div>
+    </div>
+
+  </div>
+
+  <script src="confetti.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,475 @@
+/* ============================================================
+   RESET & ROOT
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --causa-bg:     #d1fae5;
+  --causa-border: #059669;
+  --causa-text:   #064e3b;
+  --reforma-bg:   #dbeafe;
+  --reforma-border:#2563eb;
+  --reforma-text: #1e3a8a;
+  --wrong-bg:     #fee2e2;
+  --wrong-border: #dc2626;
+  --wrong-text:   #7f1d1d;
+  --no-bg:        #f3f4f6;
+  --no-border:    #6b7280;
+  --no-text:      #1f2937;
+  --radius-lg:    16px;
+  --radius-md:    10px;
+  --radius-sm:    8px;
+  --bg:           #eef2ff;
+  --surface:      #ffffff;
+  --text:         #1e1b2e;
+  --muted:        #6b7280;
+  --border:       #e5e7eb;
+  --shadow:       0 4px 16px rgba(0,0,0,0.08);
+}
+
+html { font-size: 17px; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.2rem 1rem 2rem;
+}
+
+/* ============================================================
+   CONFETTI CANVAS
+============================================================ */
+#confetti-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ============================================================
+   APP WRAPPER — wide landscape
+============================================================ */
+#app {
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.header-sub {
+  font-size: 1rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+#progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.2rem;
+}
+
+#progress-bar-bg {
+  flex: 1;
+  height: 14px;
+  background: #ddd6fe;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #4f46e5);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+#progress-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #4f46e5;
+  white-space: nowrap;
+  min-width: 100px;
+  text-align: right;
+}
+
+/* ============================================================
+   SLIDE — horizontal layout
+============================================================ */
+#slide {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "card  drop"
+    "card  bank"
+    "card  feedback";
+  gap: 1rem;
+  align-items: start;
+}
+
+/* ============================================================
+   TOURISM CARD (left column)
+============================================================ */
+#tourism-card {
+  grid-area: card;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.2rem;
+  box-shadow: var(--shadow);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+#tourism-emoji {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+#tourism-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+#tourism-sentence {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.6;
+  text-align: left;
+  background: #f9fafb;
+  border-left: 4px solid #a78bfa;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.8rem 1rem;
+  width: 100%;
+}
+
+/* ============================================================
+   DROP AREA (right top)
+============================================================ */
+#drop-area {
+  grid-area: drop;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.drop-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.drop-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.causa-label {
+  background: var(--causa-bg);
+  color: var(--causa-text);
+}
+
+.reforma-label {
+  background: var(--reforma-bg);
+  color: var(--reforma-text);
+}
+
+.drop-label-icon { font-size: 1.1rem; }
+
+.drop-zone {
+  border: 3px dashed var(--border);
+  border-radius: var(--radius-md);
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+  padding: 0.5rem;
+  cursor: default;
+}
+
+.drop-placeholder {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.drop-zone.over-causa   { border-color: var(--causa-border);  background: var(--causa-bg);  }
+.drop-zone.over-reforma { border-color: var(--reforma-border); background: var(--reforma-bg); }
+.drop-zone.over-no      { border-color: var(--no-border);      background: var(--no-bg);     }
+
+.drop-zone.state-correct {
+  border: 3px solid #059669;
+  background: var(--causa-bg);
+}
+.drop-zone.state-correct-reforma {
+  border: 3px solid #2563eb;
+  background: var(--reforma-bg);
+}
+.drop-zone.state-correct-no {
+  border: 3px solid #6b7280;
+  background: var(--no-bg);
+}
+.drop-zone.state-wrong {
+  border: 3px solid var(--wrong-border);
+  background: var(--wrong-bg);
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+
+/* ============================================================
+   PLACED TAG
+============================================================ */
+.placed-tag {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  word-break: break-word;
+  justify-content: center;
+  text-align: center;
+}
+
+.placed-tag.tag-causa   { background: #6ee7b7; color: var(--causa-text); }
+.placed-tag.tag-reforma { background: #93c5fd; color: var(--reforma-text); }
+.placed-tag.tag-no      { background: #d1d5db; color: var(--no-text); }
+.placed-tag.tag-wrong   { background: #fca5a5; color: var(--wrong-text); }
+
+.placed-tag .tag-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+/* ============================================================
+   WORD BANK (right middle)
+============================================================ */
+#bank-wrap {
+  grid-area: bank;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--shadow);
+}
+
+#bank-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+#bank-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 60px;
+  align-items: center;
+}
+
+/* ============================================================
+   WORD CARDS
+============================================================ */
+.word-card {
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.word-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.word-card:active { cursor: grabbing; }
+
+.word-card.dragging {
+  opacity: 0.3;
+  transform: scale(0.9);
+}
+
+.word-card.type-causa   { background: #a7f3d0; color: #064e3b; }
+.word-card.type-reforma { background: #bfdbfe; color: #1e3a8a; }
+.word-card.type-no      { background: #e5e7eb; color: #1f2937; }
+
+/* ============================================================
+   FEEDBACK (right bottom)
+============================================================ */
+#feedback {
+  grid-area: feedback;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  line-height: 1.5;
+}
+
+#feedback.fb-correct {
+  background: #d1fae5;
+  color: #064e3b;
+  border: 2px solid #059669;
+}
+
+#feedback.fb-wrong {
+  background: var(--wrong-bg);
+  color: var(--wrong-text);
+  border: 2px solid var(--wrong-border);
+}
+
+/* ============================================================
+   NEXT BUTTON
+============================================================ */
+#next-btn {
+  grid-column: 1 / -1;
+  display: block;
+  margin: 0.5rem auto 0;
+  padding: 14px 40px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+  transition: transform 0.12s, box-shadow 0.12s;
+  animation: pulse 1.5s infinite;
+}
+
+#next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(124,58,237,0.45);
+}
+
+@keyframes pulse {
+  0%,100%{ box-shadow: 0 6px 20px rgba(124,58,237,0.35); }
+  50%    { box-shadow: 0 6px 28px rgba(124,58,237,0.6);  }
+}
+
+/* ============================================================
+   FINAL SCREEN
+============================================================ */
+#final-screen {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+#final-emoji { font-size: 5rem; margin-bottom: 1rem; }
+
+#final-screen h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+#final-screen p {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+#final-screen button {
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+  transition: transform 0.12s;
+}
+
+#final-screen button:hover { transform: translateY(-2px); }
+
+/* ============================================================
+   HINT BOX
+============================================================ */
+#hint-box {
+  background: #fffbeb;
+  border: 1.5px solid #fcd34d;
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: #633806;
+  margin-top: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.6;
+}
+
+.causa-hl   { color: var(--causa-border);  font-weight: 700; }
+.reforma-hl { color: var(--reforma-border); font-weight: 700; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 700px) {
+  #slide {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "card"
+      "drop"
+      "bank"
+      "feedback";
+  }
+  header h1 { font-size: 1.4rem; }
+}
