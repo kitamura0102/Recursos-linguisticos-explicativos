@@ -403,4 +403,19 @@ window.restartGame = restartGame;
 /* ============================================================
    BOOT
 ============================================================ */
-document.addEventListener('DOMContentLoaded', () => renderSlide());
+document.addEventListener('DOMContentLoaded', () => { /* intro screen shows first — startGame() triggers renderSlide() */ });
+
+/* ============================================================
+   START GAME (from intro screen)
+============================================================ */
+function startGame() {
+  const intro = document.getElementById('intro-screen');
+  const app   = document.getElementById('app');
+  intro.classList.add('fade-out');
+  setTimeout(() => {
+    intro.style.display = 'none';
+    app.style.display   = 'block';
+    renderSlide();
+  }, 480);
+}
+window.startGame = startGame;
