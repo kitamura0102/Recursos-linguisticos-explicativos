@@ -473,3 +473,145 @@ header h1 {
   }
   header h1 { font-size: 1.4rem; }
 }
+
+/* ============================================================
+   INTRO SCREEN
+============================================================ */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #1e3a8a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 8000;
+  overflow: hidden;
+}
+
+/* floating emojis background */
+#intro-bg { position: absolute; inset: 0; pointer-events: none; }
+
+.float-emoji {
+  position: absolute;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  animation: floatUpDown 3.5s ease-in-out infinite;
+  opacity: 0.25;
+  user-select: none;
+}
+
+@keyframes floatUpDown {
+  0%,100% { transform: translateY(0px) rotate(-5deg); }
+  50%      { transform: translateY(-18px) rotate(5deg); }
+}
+
+/* center card */
+#intro-card {
+  position: relative;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 24px;
+  padding: 3rem 3.5rem;
+  text-align: center;
+  max-width: 520px;
+  width: 90%;
+  animation: introCardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes introCardIn {
+  from { opacity:0; transform: scale(0.7) translateY(30px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
+#intro-globe {
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  animation: spinGlobe 6s linear infinite;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes spinGlobe {
+  0%   { transform: rotate(-8deg) scale(1);   }
+  25%  { transform: rotate(0deg)  scale(1.08); }
+  50%  { transform: rotate(8deg)  scale(1);   }
+  75%  { transform: rotate(0deg)  scale(1.08); }
+  100% { transform: rotate(-8deg) scale(1);   }
+}
+
+#intro-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.25;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+
+#intro-sub {
+  font-size: 1rem;
+  color: #a5b4fc;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+}
+
+#intro-pills {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+.intro-pill {
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+}
+
+.causa-pill  { background: #d1fae5; color: #064e3b; }
+.reforma-pill{ background: #dbeafe; color: #1e3a8a; }
+
+#intro-desc {
+  font-size: 0.95rem;
+  color: #c7d2fe;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+#intro-btn {
+  padding: 16px 52px;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #1e1b4b;
+  background: #facc15;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 0 0 rgba(250,204,21,0.6);
+  animation: pulsBtn 1.8s ease-in-out infinite;
+  transition: transform 0.15s, background 0.15s;
+}
+
+#intro-btn:hover {
+  transform: scale(1.06);
+  background: #fbbf24;
+}
+
+#intro-btn:active { transform: scale(0.97); }
+
+@keyframes pulsBtn {
+  0%,100% { box-shadow: 0 0 0 0px rgba(250,204,21,0.5); }
+  50%      { box-shadow: 0 0 0 14px rgba(250,204,21,0); }
+}
+
+/* exit animation */
+#intro-screen.fade-out {
+  animation: introFadeOut 0.5s ease-in forwards;
+}
+
+@keyframes introFadeOut {
+  from { opacity:1; transform: scale(1); }
+  to   { opacity:0; transform: scale(1.04); }
+}
