@@ -1,10 +1,10 @@
 /* game.js */
- 
+
 /* ============================================================
    DATA
 ============================================================ */
 const NO_CONNECTOR = 'No tiene conector';
- 
+
 const TOURISMS = [
   {
     name:     'Turismo cultural',
@@ -84,14 +84,14 @@ const TOURISMS = [
     },
   },
 ];
- 
+
 /* ============================================================
    STATE
 ============================================================ */
 let current   = 0;
 let dzState   = { causa: null, reforma: null };
 let bothDone  = false;
- 
+
 /* ============================================================
    HELPERS
 ============================================================ */
@@ -103,11 +103,11 @@ function shuffle(arr) {
   }
   return a;
 }
- 
+
 function cardId(word) {
   return 'card-' + word.replace(/[\s]+/g, '_');
 }
- 
+
 /* Build bank cards for this slide:
    - 2 correct answers (causa + reforma, using NO_CONNECTOR if null)
    - 2 causa distractors
@@ -115,27 +115,27 @@ function cardId(word) {
    "No tiene conector" always appears as ONE shared card regardless of how many times it shows up */
 function buildBankCards(t) {
   const raw = [];
- 
+
   /* correct causa */
   raw.push(t.causa
     ? { word: t.causa,      type: 'causa' }
     : { word: NO_CONNECTOR, type: 'no'    });
- 
+
   /* correct reforma */
   raw.push(t.reforma
     ? { word: t.reforma,    type: 'reforma' }
     : { word: NO_CONNECTOR, type: 'no'      });
- 
+
   /* causa distractors */
   t.distractores.causa.forEach(w =>
     raw.push({ word: w, type: w === NO_CONNECTOR ? 'no' : 'causa' })
   );
- 
+
   /* reforma distractors */
   t.distractores.reforma.forEach(w =>
     raw.push({ word: w, type: w === NO_CONNECTOR ? 'no' : 'reforma' })
   );
- 
+
   /* dedupe: only one card per unique word */
   const seen  = new Set();
   const unique = raw.filter(c => {
@@ -143,10 +143,10 @@ function buildBankCards(t) {
     seen.add(c.word);
     return true;
   });
- 
+
   return shuffle(unique);
 }
- 
+
 /* ============================================================
    PROGRESS BAR
 ============================================================ */
@@ -156,7 +156,7 @@ function updateProgress() {
   document.getElementById('prog-current').textContent = current + 1;
   document.getElementById('prog-total').textContent   = TOURISMS.length;
 }
- 
+
 /* ============================================================
    RENDER SLIDE
 ============================================================ */
@@ -164,12 +164,12 @@ function renderSlide() {
   const t = TOURISMS[current];
   dzState = { causa: null, reforma: null };
   bothDone = false;
- 
+
   /* tourism card */
   document.getElementById('tourism-emoji').textContent    = t.emoji;
   document.getElementById('tourism-name').textContent     = t.name;
   document.getElementById('tourism-sentence').textContent = t.sentence;
- 
+
   /* reset drop zones */
   ['causa', 'reforma'].forEach(col => {
     const dz = document.getElementById('dz-' + col);
@@ -178,23 +178,23 @@ function renderSlide() {
     dz.innerHTML   = '<span class="drop-placeholder">Arrastra aquí</span>';
     setupDropZone(dz, col);
   });
- 
+
   /* bank */
   const bank  = document.getElementById('bank-cards');
   bank.innerHTML = '';
   const cards = buildBankCards(t);
   cards.forEach(c => bank.appendChild(createCard(c)));
- 
+
   /* hide feedback & next btn */
   const fb = document.getElementById('feedback');
   fb.style.display = 'none';
   fb.className     = 'feedback';
- 
+
   document.getElementById('next-btn').style.display = 'none';
- 
+
   updateProgress();
 }
- 
+
 /* ============================================================
    CREATE CARD
 ============================================================ */
@@ -206,10 +206,10 @@ function createCard(c) {
   el.dataset.word = c.word;
   el.dataset.type = c.type;
   if (c.forCol) el.dataset.forCol = c.forCol;
- 
+
   const icon = c.type === 'causa' ? '🔗' : c.type === 'reforma' ? '🔄' : '✖️';
   el.innerHTML = `<span>${icon}</span> ${c.word}`;
- 
+
   /* mouse drag */
   el.addEventListener('dragstart', e => {
     el.classList.add('dragging');
@@ -219,19 +219,19 @@ function createCard(c) {
     e.dataTransfer.effectAllowed = 'move';
   });
   el.addEventListener('dragend', () => el.classList.remove('dragging'));
- 
+
   /* touch drag */
   setupTouchDrag(el, c);
- 
+
   return el;
 }
- 
+
 /* ============================================================
    TOUCH DRAG
 ============================================================ */
 function setupTouchDrag(el, c) {
   let clone = null, ox = 0, oy = 0;
- 
+
   el.addEventListener('touchstart', e => {
     e.preventDefault();
     const touch = e.touches[0];
@@ -244,7 +244,7 @@ function setupTouchDrag(el, c) {
     document.body.appendChild(clone);
     el.classList.add('dragging');
   }, { passive: false });
- 
+
   el.addEventListener('touchmove', e => {
     e.preventDefault();
     const touch = e.touches[0];
@@ -253,7 +253,7 @@ function setupTouchDrag(el, c) {
       clone.style.top  = `${touch.clientY - oy}px`;
     }
   }, { passive: false });
- 
+
   el.addEventListener('touchend', e => {
     el.classList.remove('dragging');
     if (clone) { clone.remove(); clone = null; }
@@ -263,7 +263,7 @@ function setupTouchDrag(el, c) {
     if (zone) handleDrop(zone, { word: c.word, type: c.type, forCol: c.forCol || null, cardId: el.id });
   });
 }
- 
+
 /* ============================================================
    DROP ZONE SETUP
 ============================================================ */
@@ -287,55 +287,55 @@ function setupDropZone(zone, col) {
     } catch(_) {}
   });
 }
- 
+
 /* ============================================================
    HANDLE DROP
 ============================================================ */
 function handleDrop(zone, data) {
   const col = zone.dataset.col;
   if (dzState[col] !== null) return;
- 
+
   const t        = TOURISMS[current];
   const correct  = t[col]; // null means "No tiene conector"
   const expected = correct === null ? NO_CONNECTOR : correct;
   const isCorrect = data.word === expected;
   /* also remove forCol restriction — shared NO_CONNECTOR card is valid for any null column */
- 
+
   if (isCorrect) {
     dzState[col] = data.word;
- 
+
     /* style zone */
     const stateClass =
       col === 'causa'  && data.word === NO_CONNECTOR ? 'state-correct-no'     :
       col === 'reforma' && data.word === NO_CONNECTOR ? 'state-correct-no'    :
       col === 'causa'  ? 'state-correct' : 'state-correct-reforma';
- 
+
     zone.className = 'drop-zone ' + stateClass;
- 
+
     /* tag */
     const tagClass =
       data.word === NO_CONNECTOR ? 'tag-no'    :
       col === 'causa'            ? 'tag-causa' : 'tag-reforma';
- 
+
     const icon = data.word === NO_CONNECTOR ? '✖️' : col === 'causa' ? '✓' : '✓';
     zone.innerHTML = `<div class="placed-tag ${tagClass}"><span class="tag-icon">${icon}</span>${data.word}</div>`;
- 
+
     /* remove card from bank */
     const cardEl = document.getElementById(data.cardId);
     if (cardEl) cardEl.remove();
- 
+
     AudioFX.correct();
     checkBothDone();
- 
+
   } else {
     /* wrong */
     zone.classList.add('state-wrong');
-    setTimeout(() => zone.classList.remove('state-wrong'), 1000);
+    setTimeout(() => zone.classList.remove('state-wrong'), 500);
     AudioFX.wrong();
     showFeedback(col);
   }
 }
- 
+
 /* ============================================================
    FEEDBACK
 ============================================================ */
@@ -347,29 +347,30 @@ function showFeedback(col) {
   fb.style.display = 'block';
   setTimeout(() => { fb.style.display = 'none'; }, 2500);
 }
- 
+
 /* ============================================================
    CHECK BOTH DONE
 ============================================================ */
 function checkBothDone() {
   if (dzState.causa === null || dzState.reforma === null) return;
   bothDone = true;
- 
+
   const fb = document.getElementById('feedback');
   fb.textContent   = '🎉 ¡Muy bien! Completaste este tipo de turismo.';
   fb.className     = 'fb-correct';
   fb.style.display = 'block';
- 
+
   AudioFX.win();
   launchConfetti();
- 
+  showCorrectText();
+
   if (current < TOURISMS.length - 1) {
     document.getElementById('next-btn').style.display = 'block';
   } else {
     setTimeout(showFinal, 1800);
   }
 }
- 
+
 /* ============================================================
    NEXT SLIDE
 ============================================================ */
@@ -380,7 +381,7 @@ function nextSlide() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 window.nextSlide = nextSlide;
- 
+
 /* ============================================================
    FINAL SCREEN
 ============================================================ */
@@ -390,7 +391,7 @@ function showFinal() {
   AudioFX.win();
   launchConfetti(5000);
 }
- 
+
 function restartGame() {
   current = 0;
   document.getElementById('carousel').style.display    = 'block';
@@ -398,9 +399,8 @@ function restartGame() {
   renderSlide();
 }
 window.restartGame = restartGame;
- 
+
 /* ============================================================
    BOOT
 ============================================================ */
 document.addEventListener('DOMContentLoaded', () => renderSlide());
- 
