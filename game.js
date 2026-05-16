@@ -330,7 +330,7 @@ function handleDrop(zone, data) {
   } else {
     /* wrong */
     zone.classList.add('state-wrong');
-    setTimeout(() => zone.classList.remove('state-wrong'), 500);
+    setTimeout(() => zone.classList.remove('state-wrong'), 1000);
     AudioFX.wrong();
     showFeedback(col);
   }
